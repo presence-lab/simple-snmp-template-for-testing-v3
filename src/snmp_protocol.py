@@ -87,10 +87,7 @@ def decode_oid(oid_bytes: bytes) -> str:
     Bundle 1 requirement. Full walkthrough:
     https://clemson-cpsc-3600.github.io/simple-SNMP-template/protocol.html#oid-encoding
     """
-    raise NotImplementedError(
-        "Implement decode_oid — see "
-        "https://clemson-cpsc-3600.github.io/simple-SNMP-template/protocol.html#oid-encoding"
-    )
+    return ".".join(str(b) for b in oid_bytes)
 
 def encode_value(value: Any, value_type: ValueType) -> bytes:
     """Encode a Python value as bytes according to its SNMP ValueType.
