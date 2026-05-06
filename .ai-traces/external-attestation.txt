@@ -1,0 +1,3 @@
+External AI tool disclosures
+
+Use this file to disclose web/cloud AI interactions that are not captured automatically by the local adapter hooks.
