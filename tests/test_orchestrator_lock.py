@@ -47,33 +47,34 @@ def _holder_script(repo: str, hold_seconds: float) -> str:
         """)
 
 
-@pytest.mark.timeout(45)
+@pytest.mark.timeout(orchestrator.LOCK_TIMEOUT_SECONDS + 30)
 def test_lock_returns_false_under_contention(tmp_path):
     """Spawn a holder subprocess that grabs and holds the lock for longer
     than the orchestrator's timeout. The main-process call must return
     False instead of waiting forever or crashing."""
     (tmp_path / ".git").mkdir()
+    hold_seconds = orchestrator.LOCK_TIMEOUT_SECONDS + 5.0
     proc = subprocess.Popen(
-        [sys.executable, "-c", _holder_script(str(tmp_path), 8.0)],
+        [sys.executable, "-c", _holder_script(str(tmp_path), hold_seconds)],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
     )
     try:
         # Wait until the holder confirms it has the lock.
         line = proc.stdout.readline().strip()
         assert line == "LOCKED", f"holder did not lock: {line!r}"
-        # Now the lock is held; orchestrator's call should give up after the
-        # 5-second timeout and yield False.
+        # Now the lock is held; orchestrator's call should give up after
+        # LOCK_TIMEOUT_SECONDS and yield False.
         start = time.monotonic()
         with orchestrator._orchestrator_lock(tmp_path) as locked:
             elapsed = time.monotonic() - start
             assert locked is False
-            # Should have given up close to LOCK_TIMEOUT_SECONDS (5s),
-            # certainly not waited the full 8s the holder is holding.
+            # Should have given up close to LOCK_TIMEOUT_SECONDS, not waited
+            # the full hold duration.
             assert elapsed < orchestrator.LOCK_TIMEOUT_SECONDS + 2.5, (
                 f"lock waited too long: {elapsed:.2f}s")
     finally:
         try:
-            proc.wait(timeout=15)
+            proc.wait(timeout=hold_seconds + 10)
         except subprocess.TimeoutExpired:
             proc.kill()
             proc.wait()

@@ -124,6 +124,10 @@ def session_start(repo: Path, per_test_timeout: float = 30.0,
     watchdog spawn, and orphan recovery, and return a SessionContext
     that shares the session_id so commit dedupe at session_finish works.
     """
+    # Silent skip for internal probes (run_tests.py --collect-only sets this
+    # to suppress recursion). Logging would falsely blame the config file.
+    if os.environ.get("CAPTURE_DISABLED") == "1":
+        return None
     if not _capture_enabled(repo):
         _log(repo, "session_start: capture disabled via project-template-config.json")
         return None

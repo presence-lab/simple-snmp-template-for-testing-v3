@@ -25,7 +25,11 @@ from tests._capture.agent_adapters import installed_adapters
 from tests._capture.agent_adapters.base import AdapterMetadata, IngestResult
 
 LOCK_FILENAME = "auto-track.lock"
-LOCK_TIMEOUT_SECONDS = 5.0  # spec decision row 5
+# 30s absorbs paired triggers from a single pytest exit (pytest plugin's
+# session_finish and sitecustomize's atexit both call the orchestrator
+# within ~100ms) plus typical git op latency. Push is already detached,
+# so the lock holder only does local work — there's no deadlock risk.
+LOCK_TIMEOUT_SECONDS = 30.0
 LOG_FILENAME = ".test-runs.log"
 
 
