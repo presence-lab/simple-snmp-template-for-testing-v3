@@ -127,10 +127,16 @@ def decode_value(value_bytes: bytes, value_type: ValueType) -> Any:
     Bundle 1 requirement. Full walkthrough:
     https://clemson-cpsc-3600.github.io/simple-SNMP-template/protocol.html#value-encoding
     """
-    raise NotImplementedError(
-        "Implement decode_value — see "
-        "https://clemson-cpsc-3600.github.io/simple-SNMP-template/protocol.html#value-encoding"
-    )
+    if value_type == ValueType.INTEGER:
+        return struct.unpack('!i', value_bytes)
+    elif value_type == ValueType.STRING:
+        return value_bytes.decode('utf-8')
+    elif value_type == ValueType.COUNTER:
+        return struct.unpack('!I', value_bytes)
+    elif value_type == ValueType.TIMETICKS:
+        return struct.unpack('!I', value_bytes) 
+    else:
+        raise ValueError(f"Unknown value type: {value_type}")
 
 class SNMPMessage(ABC):
     """Abstract base for all SNMP messages (GetRequest, SetRequest, GetResponse).
