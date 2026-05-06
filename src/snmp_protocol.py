@@ -108,9 +108,9 @@ def encode_value(value: Any, value_type: ValueType) -> bytes:
     elif value_type == ValueType.STRING:
         return value.encode('utf-8')
     elif value_type == ValueType.COUNTER:
-        return struct.pack('!i', value)
+        return struct.pack('!I', value)
     elif value_type == ValueType.TIMETICKS:
-        return struct.pack('!i', value) 
+        return struct.pack('!I', value) 
     else:
         raise ValueError(f"Unknown value type: {value_type}")
 
