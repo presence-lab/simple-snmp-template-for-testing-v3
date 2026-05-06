@@ -128,13 +128,13 @@ def decode_value(value_bytes: bytes, value_type: ValueType) -> Any:
     https://clemson-cpsc-3600.github.io/simple-SNMP-template/protocol.html#value-encoding
     """
     if value_type == ValueType.INTEGER:
-        return struct.unpack('!i', value_bytes)
+        return struct.unpack('!i', value_bytes)[0]
     elif value_type == ValueType.STRING:
         return value_bytes.decode('utf-8')
     elif value_type == ValueType.COUNTER:
-        return struct.unpack('!I', value_bytes)
+        return struct.unpack('!I', value_bytes)[0]
     elif value_type == ValueType.TIMETICKS:
-        return struct.unpack('!I', value_bytes) 
+        return struct.unpack('!I', value_bytes)[0] 
     else:
         raise ValueError(f"Unknown value type: {value_type}")
 
