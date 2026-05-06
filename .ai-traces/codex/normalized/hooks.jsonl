@@ -1,0 +1,1 @@
+{"adapter_name": "codex", "cwd": "", "event_id": "042b3a7f2353044c24d12f83", "event_type": "session_start", "evidence_refs": [".ai-traces/codex/raw/hooks/hooks-unknown.jsonl:1"], "extras": {"hook_event_name": "SessionStart", "raw_payload": {}}, "session_id": "hooks-unknown", "ts": "2026-05-06T01:37:03Z", "turn_id": "hook"}

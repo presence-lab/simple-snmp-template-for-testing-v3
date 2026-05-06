@@ -24,42 +24,48 @@ model_reasoning_effort = "medium"
 child_agents_md = true
 codex_hooks = true
 
+# Hook commands are bootstrapped with `python3`, which exists out-of-the-box on
+# macOS (Xcode CLI tools) and Linux, and is registered by the python.org and
+# Microsoft Store installers on Windows. The launcher (.codex/hooks/_run.py)
+# then re-execs into ./venv/bin/python (POSIX) or .\venv\Scripts\python.exe
+# (Windows) so the capture site-customize is loaded.
+
 [[hooks.SessionStart]]
 matcher = ".*"
 [[hooks.SessionStart.hooks]]
 type = "command"
-command = "python -c \"import runpy,subprocess; r=subprocess.check_output(['git','rev-parse','--show-toplevel'], text=True).strip(); runpy.run_path(r + '/.codex/hooks/session_start.py', run_name='__main__')\""
+command = "python3 .codex/hooks/_run.py session_start"
 timeout = 30
 
 [[hooks.UserPromptSubmit]]
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
-command = "python -c \"import runpy,subprocess; r=subprocess.check_output(['git','rev-parse','--show-toplevel'], text=True).strip(); runpy.run_path(r + '/.codex/hooks/user_prompt_submit.py', run_name='__main__')\""
+command = "python3 .codex/hooks/_run.py user_prompt_submit"
 timeout = 30
 
 [[hooks.PreToolUse]]
 matcher = ".*"
 [[hooks.PreToolUse.hooks]]
 type = "command"
-command = "python -c \"import runpy,subprocess; r=subprocess.check_output(['git','rev-parse','--show-toplevel'], text=True).strip(); runpy.run_path(r + '/.codex/hooks/pre_tool_use.py', run_name='__main__')\""
+command = "python3 .codex/hooks/_run.py pre_tool_use"
 timeout = 30
 
 [[hooks.PermissionRequest]]
 matcher = ".*"
 [[hooks.PermissionRequest.hooks]]
 type = "command"
-command = "python -c \"import runpy,subprocess; r=subprocess.check_output(['git','rev-parse','--show-toplevel'], text=True).strip(); runpy.run_path(r + '/.codex/hooks/permission_request.py', run_name='__main__')\""
+command = "python3 .codex/hooks/_run.py permission_request"
 timeout = 30
 
 [[hooks.PostToolUse]]
 matcher = ".*"
 [[hooks.PostToolUse.hooks]]
 type = "command"
-command = "python -c \"import runpy,subprocess; r=subprocess.check_output(['git','rev-parse','--show-toplevel'], text=True).strip(); runpy.run_path(r + '/.codex/hooks/post_tool_use.py', run_name='__main__')\""
+command = "python3 .codex/hooks/_run.py post_tool_use"
 timeout = 30
 
 [[hooks.Stop]]
 [[hooks.Stop.hooks]]
 type = "command"
-command = "python -c \"import runpy,subprocess; r=subprocess.check_output(['git','rev-parse','--show-toplevel'], text=True).strip(); runpy.run_path(r + '/.codex/hooks/stop.py', run_name='__main__')\""
+command = "python3 .codex/hooks/_run.py stop"
 timeout = 30
