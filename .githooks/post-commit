@@ -1,0 +1,8 @@
+#!/bin/sh
+# Editor-agnostic capture trigger. Delegates to a Python module so the
+# logic is unit-tested. Always exits 0 — a misbehaving hook must not
+# block a student's commit.
+#
+# This hook fires only inside this repo because core.hooksPath is set
+# with --local (see tests/_capture/runtime_triggers.py).
+exec python -m tests._capture.post_commit_entry || true

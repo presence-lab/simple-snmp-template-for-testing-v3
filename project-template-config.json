@@ -1,0 +1,5 @@
+{
+  "distribution_mode": "student",
+  "capture_enabled": true,
+  "notes": "Student-distribution copy. Capture layer records test runs to the student's git repo."
+}
